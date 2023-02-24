@@ -1,0 +1,11 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: multi
+  profiles:
+    active: local
+
+logging:
+  config: classpath:logback/logback.xml
