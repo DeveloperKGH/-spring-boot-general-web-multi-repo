@@ -5,12 +5,17 @@ import lombok.Getter;
 
 import java.util.List;
 
+@Getter
 public class BadRequestException extends BaseException {
 
-	@Getter
+	public String code;
+
+	public String message;
 	private final List<ErrorResult> errorResults;
 
 	public BadRequestException(List<ErrorResult> errorResults) {
+		this.code = "4000000";
+		this.message = "Bad Request";
 		this.errorResults = errorResults;
 	}
 
