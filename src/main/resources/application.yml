@@ -6,6 +6,17 @@ spring:
     name: multi
   profiles:
     active: local
+  datasource:
+    hikari:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3306/sample?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC&autoReconnection=true
+      username: root
+      password: password
+      minimum-idle: 10
+      maximum-pool-size: 50
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
 
 logging:
   config: classpath:logback/logback.xml
