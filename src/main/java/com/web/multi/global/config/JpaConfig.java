@@ -46,7 +46,7 @@ public class JpaConfig {
 
     private Properties additionalProperties() {
         Properties properties = new Properties();
-        properties.setProperty("hibernate.hbm2ddl.auto", "create"); // 스키마 생성 전략 : SessionFactory 시작시 스키마를 삭제하고 다시 생성
+        properties.setProperty("hibernate.hbm2ddl.auto", "none"); // 스키마 생성 전략 : SessionFactory 시작시 스키마를 삭제하고 다시 생성
         properties.setProperty("hibernate.format_sql", "true");
         properties.setProperty("hibernate.use_sql_comments", "true");
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
