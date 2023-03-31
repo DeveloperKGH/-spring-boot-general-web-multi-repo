@@ -1,15 +1,20 @@
 package com.web.multi.domain.entity;
 
 import com.web.multi.domain.enums.MemberRole;
+import com.web.multi.domain.enums.MemberStatus;
 import com.web.multi.domain.enums.converter.MemberRoleConverter;
+import com.web.multi.domain.enums.converter.MemberStatusConverter;
+import com.web.multi.domain.repository.IMemberRepository;
 import com.web.multi.global.domain.BaseTimeEntity;
+import com.web.multi.global.error.exception.ConflictException;
 import com.web.multi.global.util.EncryptionUtil;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 @EqualsAndHashCode(of = "loginId")
-@DynamicUpdate
+@DynamicInsert @DynamicUpdate
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
@@ -31,11 +36,26 @@ public class Member extends BaseTimeEntity {
     @Column(name = "role")
     private MemberRole role;
 
-    @Builder
-    public Member(String loginId, String password, MemberRole role) {
-        this.loginId = loginId;
+    @Convert(converter = MemberStatusConverter.class)
+    @Column(name = "status")
+    private MemberStatus status;
+    public static Member signUpMember(String loginId, String password, IMemberRepository repository) {
+        Member member = new Member();
+        member.loginId = loginId;
+        member.checkLoginIdDuplication(repository);
+        member.setHashedPassword(password);
+        member.role = MemberRole.ROLE_MEMBER;
+        member.status = MemberStatus.ACTIVE;
+        repository.save(member);
+        return member;
+    }
+
+    public void setHashedPassword(String password) {
         this.password = EncryptionUtil.encodeBcrypt(password);
-        this.role = role;
+    }
+
+    public void checkLoginIdDuplication(IMemberRepository repository) {
+        if (repository.existsByLoginId(this.loginId)) throw new ConflictException(ConflictException.CauseCode.DUPLICATE_LOGIN_ID);
     }
 
 }

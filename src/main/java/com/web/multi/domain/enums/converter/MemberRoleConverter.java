@@ -10,7 +10,7 @@ import java.util.Optional;
 public class MemberRoleConverter implements AttributeConverter<MemberRole, String> {
     @Override
     public String convertToDatabaseColumn(MemberRole attribute) {
-        return attribute.name();
+        return Optional.ofNullable(attribute).isPresent() ? attribute.getCode() : null;
     }
 
     @Override
