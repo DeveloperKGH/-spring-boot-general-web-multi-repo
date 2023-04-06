@@ -1,6 +1,6 @@
 package com.web.multi.domain.enums;
 
-public enum MemberStatus {
+public enum EMemberStatus {
     ACTIVE
     ,
     INACTIVE

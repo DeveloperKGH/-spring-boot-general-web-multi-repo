@@ -1,6 +1,6 @@
 package com.web.multi.application.service;
 
-import com.web.multi.application.dto.SignUpServiceDto;
+import com.web.multi.application.dto.CreateAdminServiceDto;
 import com.web.multi.domain.entity.Member;
 import com.web.multi.domain.repository.IMemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,13 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
-public class SignService {
+public class AdminService {
 
     private final IMemberRepository memberJpaRepository;
 
     @Transactional
-    public Long signUp(SignUpServiceDto dto) {
-        return Member.signUpMember(dto.getLoginId(), dto.getPassword(), memberJpaRepository).getId();
+    public Long createAdmin(CreateAdminServiceDto dto) {
+        return Member.signUpAdmin(dto.getLoginId(), dto.getPassword(), memberJpaRepository).getId();
     }
 
 }

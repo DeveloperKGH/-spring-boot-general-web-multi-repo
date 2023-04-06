@@ -1,9 +1,9 @@
 package com.web.multi.domain.entity;
 
-import com.web.multi.domain.enums.MemberRole;
-import com.web.multi.domain.enums.MemberStatus;
-import com.web.multi.domain.enums.converter.MemberRoleConverter;
-import com.web.multi.domain.enums.converter.MemberStatusConverter;
+import com.web.multi.domain.enums.EMemberRole;
+import com.web.multi.domain.enums.EMemberStatus;
+import com.web.multi.domain.enums.converter.EMemberRoleConverter;
+import com.web.multi.domain.enums.converter.EMemberStatusConverter;
 import com.web.multi.domain.repository.IMemberRepository;
 import com.web.multi.global.domain.BaseTimeEntity;
 import com.web.multi.global.error.exception.ConflictException;
@@ -32,22 +32,37 @@ public class Member extends BaseTimeEntity {
     @Column(name = "password")
     private String password;
 
-    @Convert(converter = MemberRoleConverter.class)
+    @Convert(converter = EMemberRoleConverter.class)
     @Column(name = "role")
-    private MemberRole role;
+    private EMemberRole role;
 
-    @Convert(converter = MemberStatusConverter.class)
+    @Convert(converter = EMemberStatusConverter.class)
     @Column(name = "status")
-    private MemberStatus status;
+    private EMemberStatus status;
+
+    @Embedded
+    private MemberAuthorities authorities = new MemberAuthorities();
     public static Member signUpMember(String loginId, String password, IMemberRepository repository) {
         Member member = new Member();
         member.loginId = loginId;
         member.checkLoginIdDuplication(repository);
         member.setHashedPassword(password);
-        member.role = MemberRole.ROLE_MEMBER;
-        member.status = MemberStatus.ACTIVE;
+        member.role = EMemberRole.ROLE_MEMBER;
+        member.status = EMemberStatus.ACTIVE;
         repository.save(member);
         return member;
+    }
+
+    public static Member signUpAdmin(String loginId, String password, IMemberRepository repository) {
+        Member admin = new Member();
+        admin.loginId = loginId;
+        admin.checkLoginIdDuplication(repository);
+        admin.setHashedPassword(password);
+        admin.role = EMemberRole.ROLE_ADMIN;
+        admin.status = EMemberStatus.ACTIVE;
+        admin.authorities = MemberAuthorities.getAdminAuthorities(admin);
+        repository.save(admin);
+        return admin;
     }
 
     public void setHashedPassword(String password) {

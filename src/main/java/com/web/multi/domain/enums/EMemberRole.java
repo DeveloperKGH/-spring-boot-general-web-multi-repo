@@ -8,19 +8,19 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-public enum MemberRole {
+public enum EMemberRole {
     ROLE_ADMIN("ADMIN"), ROLE_MEMBER("MEMBER");
 
     @Getter
     private final String code;
 
-    MemberRole(String code) {
+    EMemberRole(String code) {
         this.code = code;
     }
 
-    private static final Map<String, MemberRole> map = Stream.of(MemberRole.values()).collect(Collectors.toMap(MemberRole::getCode, Function.identity()));
+    private static final Map<String, EMemberRole> map = Stream.of(EMemberRole.values()).collect(Collectors.toMap(EMemberRole::getCode, Function.identity()));
 
-    public static MemberRole from(String code) {
+    public static EMemberRole from(String code) {
         return Optional
                 .ofNullable(map.get(code))
                 .orElseThrow(() -> new NotSupportedCodeException("{" + code + "} is not supported code."));
